@@ -1,0 +1,244 @@
+<html lang='en-ZA'>
+    <head>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
+<link rel='manifest' href='manifest.webmanifest'>
+<title>Smallr Lens</title>
+</head>
+<body>
+<script>
+if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('sw.js');
+    console.log('[SW] Service Worker successfully registered.');
+}else{
+    console.warn('[SW] IE does not support anything... like at all. SW not registered.');
+}
+</script>
+<center>
+<img src='iconX.png' id='logo' width='45px'>
+    
+<video id='vid' oncontextmenu='event.preventDefault()' autoplay='true'></video>
+<nav class='gallery' >
+<canvas id='cvs' width='' height=''></canvas>
+</nav>
+<input type='text' placeholder='Lot Number' id='ln'><br>
+
+<button id='capture'><img src='camera.png' width='30px' onclick='capture(); buttonHover(event);'></button>
+
+<section class='capture-temp'>
+  </section>
+<section id='ctrl'>
+
+<input type='checkbox' id='auto-save' data='auto-save' value='On'>
+<label for='auto-save'>
+<button class='as' id='as-def' onclick='showAuto()'>Auto Save</button>
+</label>
+<button id='as-def' onclick='toggleOpac(event)'>Preview</button>
+</section>  
+
+</center>
+<style>
+.as{
+    background: #f2f2f2;
+    color: #333;
+}
+.as-on{
+    background: rgb(0, 32, 96);
+    color: #fff;
+}
+#as-def{
+    width: 100px;
+    height: 30px;
+    border: 0px;
+    border-radius: 0px;
+}
+#auto-save{
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+    visibility: none;
+}
+#ctrl{
+    position: fixed;
+    bottom: 0px;
+    background: #000;
+    opacity: 1;
+    padding: 4px;
+    width: 100%;
+    z-index: 99;
+}
+.capture-temp{
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  position: fixed;
+  background: #000;
+  opacity: 1;
+  z-index: -10;
+}
+canvas{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+</style>
+<script>
+if(navigator.mediaDevices.getUserMedia){
+  navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}, audio: false}).then(stream => {
+    document.querySelector('#vid').srcObject = stream;
+    console.log(stream);
+  });
+}
+
+var w = window.outerWidth;
+var h = window.outerHeight;
+var saveState = document.querySelector('#auto-save').checked;
+function capture(){
+  var preview = document.querySelector('.capture-temp');
+  var vid = document.querySelector('#vid');
+  var cvs = document.querySelector('#cvs');
+  var ctx = cvs.getContext('2d');
+  cvs.setAttribute('width', w+'px');
+  cvs.setAttribute('height', h+'px');
+  ctx.drawImage(vid, 0, 0, w, h);
+  
+  cvs.toBlob(blob => {
+    var link = URL.createObjectURL(blob);
+    preview.style.zIndex = '98';
+    sendLotPic(link);
+    setTimeout(() => {preview.style.zIndex = '-10'; preview.innerHTML = ''}, 500);
+    preview.innerHTML = `<img src='${link}'>`;
+    var ndate  = new Date();
+    var now = ndate.getTime()/1000;
+    var a = document.createElement('a', 'a');
+    a.setAttribute('href', link);
+    a.setAttribute('download', now+'.png');
+  if(saveState = 'true'){
+    a.click();
+    }else{
+    console.log('Click...');
+    }
+  });
+}
+
+function toggleOpac(event){
+  var target = document.querySelector('.gallery');
+  target.classList.toggle('hidden');
+  var classes = target.getAttribute('class');
+  console.log(classes);
+  if(classes.indexOf('hidden') < 0){
+      event.target.innerHTML = 'Preview';
+  }else{
+      event.target.innerHTML = 'Close Preview';
+  }
+}
+
+function showAuto(){
+        document.querySelector('.as').classList.toggle('as-on');
+        if(document.querySelector('#auto-save').checked = true){
+        querySelector('#auto-save').checked = false;
+    }
+}
+
+function buttonHover(event){
+    var t = document.querySelector('#capture');
+    setTimeout(()=>{document.querySelector('#capture').style.filter = 'invert(0%)'}, 100);
+}
+function sendLotPic(blob){
+var fd = new FormData();
+fd.append('img', blob);
+console.log(fd, blob);
+fetch(`https://cors-anywhere.herokuapp.com/https://landsea.co.za/qrcode/images.php`, {method:"POST", body:fd})
+                .then(response => console.log(response.text()))
+   
+   /*
+    console.log(blob);
+    var fd = new FormData();
+   
+    fd.append('img', blob);
+    var xhr = new XMLHttpRequest();
+    var url = 'https://landsea.co.za/qrcode/images.php';
+    xhr.open('POST', url, true);
+    xhr.onreadystatechange = event => {
+        if(xhr.readyState == '4' && xhr.status == '200'){
+            alert('Image Uploaded');
+            console.log(xhr.responseText);
+        }else{
+            alert('Error uploading image. James has been notified.');
+        }
+    }
+    xhr.send(fd);
+    */
+}
+</script>
+
+<style>
+.gallery{
+  top: 0;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: #000;
+  opacity: 0;
+  margin-left: 100%;
+  transition: ease-in-out .1s;
+}
+.hidden{
+  opacity: 1;
+  margin-left: 0px;
+}
+#vid{
+  filter: grayscale(0%);
+  width: 100%;
+  height: 100%;
+}
+#cvs{
+  width: 100%;
+  height: 100%;
+}
+body{
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+button:focus, input:focus{
+    outline: none;
+}
+button[id='capture']{
+    position: fixed;
+    bottom: 45px;
+    width: 50px;
+    height: 50px;
+    border: 0px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px #039 solid;
+    margin-left: -12.5px;
+}
+input[id='ln']{
+    position: fixed;
+    bottom: 105px;
+    width: 100%;
+    height: 50px;
+    border: 0px;
+    border-radius: 0%;
+    background: #fff;
+    border: 0px #900 solid;
+    margin-left: -50%;
+    text-align: center;
+    background: rgba(255, 255, 255, .2);
+    font-size: 1.2em;
+    color: #fff;
+}
+button[id='capture']:hover{
+    filter: invert(100%);
+}
+#logo{
+    position: fixed;
+    top: 8px;
+    left: 8px;
+}
+</style>
+</body>
+</html>

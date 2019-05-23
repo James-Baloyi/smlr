@@ -1,0 +1,16 @@
+{
+  "name": "Smallr Lens",
+  "short_name": "Smallr Lens",
+  "start_url": "/lens/index.html",
+  "scope": "/lens",
+  "display": "standalone",
+  "theme_color": "#000",
+  "background_color": "#000",
+  "icons": [
+    {
+      "src": "iconX.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ]
+}
