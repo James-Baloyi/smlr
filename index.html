@@ -20,7 +20,6 @@ if('serviceWorker' in navigator){
 <nav class='gallery' >
 <canvas id='cvs' width='' height=''></canvas>
 </nav>
-<input type='text' placeholder='Lot Number' id='ln'><br>
 
 <button id='capture'><img src='camera.png' width='30px' onclick='capture(); buttonHover(event);'></button>
 
@@ -238,6 +237,7 @@ button[id='capture']:hover{
     position: fixed;
     top: 8px;
     left: 8px;
+    z-index: 99999;
 }
 </style>
 </body>
