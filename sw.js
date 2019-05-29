@@ -10,15 +10,10 @@ self.addEventListener('install', e => {
 	    })
 	);
 });
-/*
+
 self.addEventListener('fetch', e => {
     var req = e.request;
     if(caches.match(req)){
-        e.respondWith(caches.match(req+'index.html'));
-        console.log(req);
-    }else{
-        var index = fetch(req);
-        e.respondWith('/index.html');
+        console.log('Caches');
     }
 });
-*/
