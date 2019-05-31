@@ -146,7 +146,7 @@ function sendLotPic(blob){
 var fd = new FormData();
 fd.append('img', blob);
 console.log(fd, blob);
-fetch(`https://cors-anywhere.herokuapp.com/https://landsea.co.za/qrcode/images.php`, {method:"POST", body:fd})
+fetch(`https://cors-anywhere.herokuapp.com/https://example.co.za/qrcode/images.php`, {method:"POST", body:fd})
                 .then(response => console.log(response.text()))
    
    /*
@@ -155,7 +155,7 @@ fetch(`https://cors-anywhere.herokuapp.com/https://landsea.co.za/qrcode/images.p
    
     fd.append('img', blob);
     var xhr = new XMLHttpRequest();
-    var url = 'https://landsea.co.za/qrcode/images.php';
+    var url = 'https://example.co.za/qrcode/images.php';
     xhr.open('POST', url, true);
     xhr.onreadystatechange = event => {
         if(xhr.readyState == '4' && xhr.status == '200'){
