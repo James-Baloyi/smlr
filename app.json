@@ -1,0 +1,17 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ],
+  "description": "Smaller -> Smlr",
+  "env": {
+  },
+  "formation": {
+  },
+  "name": "Smlr",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
