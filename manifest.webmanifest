@@ -1,8 +1,8 @@
 {
   "name": "Smallr Lens",
   "short_name": "Smallr Lens",
-  "start_url": "/lens/index.html",
-  "scope": "/lens",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
   "theme_color": "#000",
   "background_color": "#000",
