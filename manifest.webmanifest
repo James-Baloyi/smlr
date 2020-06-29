@@ -1,7 +1,7 @@
 {
   "name": "Smallr Lens",
   "short_name": "Smallr Lens",
-  "start_url": "smlr/index.html",
+  "start_url": "/index.html",
   "scope": "/smlr/",
   "display": "standalone",
   "theme_color": "#000",
